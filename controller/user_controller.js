@@ -4,10 +4,14 @@ import { loginURL } from "../constraints/urls";
 import { Storage } from "expo-storage";
 
 async function setCurrentUser(userData) {
-  await Storage.setItem({
-    key: "currentUser",
-    value: userData,
-  });
+  try {
+    await Storage.setItem({
+      key: "currentUser",
+      value: JSON.stringify(userData),
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function userLoginFunction(email, password) {
@@ -24,7 +28,7 @@ function userLoginFunction(email, password) {
       if (response.status === 200) {
         console.log(response.data);
         setLoggedIn(true);
-        await setCurrentUser(response.data);
+        setCurrentUser(response.data);
         setCurrentUserData(response.data);
       }
       // todo: Store the token in the local storage
