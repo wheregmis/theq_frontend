@@ -9,17 +9,16 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
-// import AddProject from "../Components/AddProject";
-// import ProjectCard from "../Components/ProjectCard";
-// import { projectRouteURL } from "../constraints/urls";
-// import ProjectContext, { fetchProjects } from "../State/ProjectContext.js";
+import AddProject from "../Components/AddProject";
+import ProjectCard from "../Components/ProjectCard";
+import { projectRouteURL } from "../constraints/urls";
+import ProjectContext, { fetchProjects } from "../State/ProjectContext.js";
 import { Storage } from "expo-storage";
-import MyImage from '../Images/tims.png';
 import { StackActions } from "@react-navigation/native";
-// import { Picker } from "@react-native-picker/picker";
+import { Picker } from "@react-native-picker/picker";
 
 export default function Dashboard({ route, navigation }) {
-  // const { projects, setProjects } = useContext(ProjectContext);
+  const { projects, setProjects } = useContext(ProjectContext);
   const renderItem = ({ item }) => (
     <ProjectCard projectId={item._id} navigation={navigation} />
   );
@@ -60,7 +59,7 @@ export default function Dashboard({ route, navigation }) {
       <ScrollView className="w-full">
         <View className="flex flex-col items-center justify-center bg-slate-50 pt-5">
           <View className="flex flex-row px-6 w-full items-center justify-evenly">
-            <Text className="text-xl text-center font-bold mb-6 text-slate-900 -ml-2">
+            <Text className="text-2xl text-center font-bold mb-6 text-slate-900 -ml-2">
             Tim Hortons Queue
             </Text>
             {/* <View className="-mt-4">
@@ -106,14 +105,10 @@ export default function Dashboard({ route, navigation }) {
             keyExtractor={(project) => project._id.toString()}
           /> */}
 
-          <View className="border-1 p-5  bg-white shadow-xl w-80 rounded-xl mb-6">
+          <View>
             {/* Header for Project List */}
-            <View className="flex flex-row px-3 mt-3 rounded-md mb-12">
-            <Image
-                source={MyImage}
-                className="rounded-xl mx-auto"
-                style={{ width: 150, height: 150 }}
-              />
+            <View className="flex flex-row px-3 mt-3">
+            <Image></Image>
  
             </View>
             <View className="flex flex-row px-3 mt-3">
@@ -135,36 +130,68 @@ export default function Dashboard({ route, navigation }) {
  
             </View>
           </View>
-          <Pressable >
-          <View className="bg-black h-12 shadow-md w-40 mb-6 items-center justify-center rounded-md">
-        <Text className="text-1xl font-bold text-white">Join in Queue </Text>
-        </View>
-        </Pressable>
-          <View className=" p-5  bg-white shadow-xl w-80 rounded-xl mb-12">
-        <Text className="text-md3 font-bold mb-6 text-slate-900 text-center">Estimates and Other Information</Text>
 
-        <Text className="mb-1">Estimated waiting time</Text>
-        <TextInput
-          className="w-full bg-white border border-slate-200 rounded-md h-12 px-4 mb-4"
-          placeholderTextColor="#000"
-          placeholder="Placeholder"
-         
-        />
-        <Text className="mb-1">Estimated waiting time</Text>
-        <TextInput
-          className="w-full bg-white border border-slate-200 rounded-md h-12 px-4"
-          placeholderTextColor="#000"
-          placeholder="Placeholder"
-          
-       
-        />
-      </View>
+          {/* Create a divider */}
+          <View className="w-full h-1 bg-slate-200" />
 
+          {/* Creating a view to show filters */}
+          <View className="flex flex-row items-center justify-center px-3">
+            <Text className="w-1/3 text-sm font-bold mb-6 text-slate-900">
+              Filter
+            </Text>
+            <View className="m-1 w-2/3 z-50">
+              <Picker
+                selectedValue={filter}
+                onValueChange={(itemValue, itemIndex) => {
+                  setFilter(itemValue);
+                  if (itemValue === "All") {
+                    setFilteredProjects(projects);
+                  } else {
+                    setFilteredProjects(
+                      projects.filter((project) => project.status === itemValue)
+                    );
+                  }
+                }}
+              >
+                <Picker.Item label="All" value="All" />
+                <Picker.Item label="Pending" value="Pending" />
+                <Picker.Item label="In Progress" value="In Progress" />
+                <Picker.Item label="Completed" value="Completed" />
+              </Picker>
+            </View>
           </View>
 
+          <View className="flex row items-center justify-end">
+            <Pressable
+              className="rounded-md flex flex-row justify-end items-end"
+              onPress={() => {
+                setFilteredProjects(
+                  isSortInverse
+                    ? filteredProjects.sort((a, b) => a.cost - b.cost)
+                    : filteredProjects.sort((a, b) => b.cost - a.cost)
+                );
+                setIsSortInverse(!isSortInverse);
+                console.log(filteredProjects);
+              }}
+            >
+              <Text className="text-blue-400 text-base font-medium">
+                Sort By Price
+              </Text>
+            </Pressable>
+          </View>
 
+          {/* Create a divider */}
+          <View className="w-full h-1 bg-slate-200 mt-2" />
 
-
+          {/* // map projects to project card */}
+          {filteredProjects.map((project) => (
+            <ProjectCard
+              projectId={project._id}
+              navigation={navigation}
+              key={project._id}
+            />
+          ))}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

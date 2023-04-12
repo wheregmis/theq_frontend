@@ -8,6 +8,7 @@ export default function LoginScreen({ route, navigation }) {
   const [loggedIn, currentUserData, error, login, logout] = userLoginFunction();
 
   function handleLogin() {
+   
     try {
       login(email, password);
       currentUserData && navigation.navigate("UserDashboard");
