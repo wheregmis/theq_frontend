@@ -9,3 +9,8 @@ export const organizationsAtom = atom({
   key: "organizationsAtom",
   default: null,
 });
+
+export const estimatedWaitingTimeAtom = atom({
+  key: "estimatedWaitingTimeAtom",
+  default: 0,
+});

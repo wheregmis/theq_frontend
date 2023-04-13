@@ -25,7 +25,7 @@ const OrganizationList = () => {
       {organizations?.map((organization) => (
         <OrganizationInfoCard
           key={organization._id}
-          organization={organization}
+          organizationId={organization._id}
           loading={organization == null}
           onPress={() => handleOrganizationPress(organization._id)}
         />

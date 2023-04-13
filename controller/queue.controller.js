@@ -8,6 +8,7 @@ function joinInQueue() {
   const [error, setError] = useState(null);
 
   const joinQueue = async (queueData) => {
+    console.log(queueData);
     setLoading(true);
     try {
       const response = await axios.post(queueRouteURL, {
@@ -15,11 +16,14 @@ function joinInQueue() {
         organization: queueData.organization,
       });
       if (response.status === 200) {
+        console.log(response.data);
         setQueueData(response.data);
         setLoading(false);
       }
       // todo: Store the token in the local storage
+      console.log(response);
     } catch (error) {
+      console.log(error.response.data.message);
       setLoading(false);
       setError(error.response.data.message);
     }
@@ -29,3 +33,5 @@ function joinInQueue() {
 }
 
 export default joinInQueue;
+
+export { calculateEstimatedWaitTime };

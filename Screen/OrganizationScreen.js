@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, ScrollView, SafeAreaView, Pressable } from "react-native";
 
 import OrganizationInfoCard from "../Components/OrganizationInfoCard";
@@ -10,13 +10,46 @@ import {
 } from "react-native-heroicons/outline";
 import { getCurrentUser } from "../controller/user_controller";
 import joinInQueue from "../controller/queue.controller";
+import { organizationsAtom } from "../state/atoms";
+import { useRecoilState } from "recoil";
 
 export default function OrganizationScreen({ route, navigation }) {
   const { organizationId } = route.params;
-  const { organization, loading, error } = useFetchOrganization(organizationId);
+
+  const [organizations, setOrganizations] = useRecoilState(organizationsAtom);
+
+  const organization = organizations.find((org) => org._id === organizationId);
+
   const [currentUser, setCurrentUser] = React.useState(null);
   const [queueData, joinQueueLoading, joinQueueError, joinQueue] =
     joinInQueue();
+
+  const [estimatedWaitingTime, setEstimatedWaitingTime] = useState(0);
+
+  function calculateEstimatedWaitingTime(
+    userPosition,
+    averageServiceTime,
+    averageWaitingTime
+  ) {
+    const usersInFront = userPosition - 1;
+    const estimatedWaitingTime =
+      averageServiceTime * usersInFront + averageWaitingTime;
+    return estimatedWaitingTime;
+  }
+
+  function calculateEstimatedWaitTime() {
+    const userPosition = 2;
+    const averageServiceTime = 2; // minutes
+    const averageWaitingTime = 0.1; // minutes
+
+    const estimatedWaitingTime = calculateEstimatedWaitingTime(
+      userPosition,
+      averageServiceTime,
+      averageWaitingTime
+    );
+
+    setEstimatedWaitingTime(estimatedWaitingTime);
+  }
 
   React.useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -54,7 +87,7 @@ export default function OrganizationScreen({ route, navigation }) {
           <View className="w-full h-1 bg-slate-200" />
 
           <OrganizationInfoCard
-            organization={organization}
+            organizationId={organization._id}
             loading={organization == null}
           />
 
