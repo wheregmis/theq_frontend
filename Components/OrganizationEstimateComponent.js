@@ -1,6 +1,8 @@
+import { TextInput, View, Text } from "react-native";
+
 export default function OrganizationEstimateComponent() {
   return (
-    <View className=" p-5  bg-white shadow-xl w-80 rounded-xl mb-12">
+    <View className="bg-white w-full rounded-xl mb-12 p-4">
       <Text className="text-md3 font-bold mb-6 text-slate-900 text-center">
         Estimates and Other Information
       </Text>

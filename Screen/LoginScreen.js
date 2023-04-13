@@ -18,7 +18,7 @@ export default function LoginScreen({ route, navigation }) {
 
   return (
     <View className="flex-1 items-center pt-12 justify-start bg-slate-50">
-      <View className="bg-white h-12 mt-12 mb-12 shadow-md w-60 items-center justify-center rounded-md">
+      <View className="bg-white h-12 mt-12 mb-12 w-60 items-center justify-center rounded-md">
         <Text className="text-1xl font-bold text-gray-500">The Q </Text>
       </View>
       <View className="p-8 mt-12 w-full max-w-sm">

@@ -6,6 +6,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./Screen/LoginScreen";
 import Dashboard from "./Screen/DashboardScreen";
 import AdminDashboard from "./Screen/AdminDashboard";
+import OrganizationScreen from "./Screen/OrganizationScreen";
+import { RecoilRoot } from "recoil";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,34 +15,45 @@ function App() {
   const [projects, setProjects] = React.useState([]);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="UserDashboard">
-        <Stack.Screen
-          name="LoginScreen"
-          component={LoginScreen}
-          options={{
-            headerBackVisible: false,
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="UserDashboard"
-          component={Dashboard}
-          options={{
-            headerBackVisible: false,
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="AdminDashboard"
-          component={AdminDashboard}
-          options={{
-            headerBackVisible: false,
-            headerShown: false,
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <RecoilRoot>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="UserDashboard">
+          <Stack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+            options={{
+              headerBackVisible: false,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="UserDashboard"
+            component={Dashboard}
+            options={{
+              headerBackVisible: false,
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AdminDashboard"
+            component={AdminDashboard}
+            options={{
+              headerBackVisible: false,
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="OrganizationScreen"
+            component={OrganizationScreen}
+            options={{
+              headerBackVisible: false,
+              headerShown: false,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </RecoilRoot>
   );
 }
 

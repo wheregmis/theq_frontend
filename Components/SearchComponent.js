@@ -7,7 +7,7 @@ export default function SearchComponent() {
         Search Organization
       </Text>
       <TextInput
-        className="w-5/6 bg-white shadow-sm border border-slate-200 rounded-md h-12  placeholder:font-normal placeholder:text-gray-400 px-4 mt-1"
+        className="w-5/6 bg-white border border-slate-200 rounded-md h-12  placeholder:font-normal placeholder:text-gray-400 px-4 mt-1"
         placeholder="Type to Search"
       />
     </View>

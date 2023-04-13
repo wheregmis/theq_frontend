@@ -14,6 +14,17 @@ async function setCurrentUser(userData) {
   }
 }
 
+async function getCurrentUser() {
+  try {
+    const value = await Storage.getItem({ key: "currentUser" });
+    if (value) {
+      return JSON.parse(value);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 function userLoginFunction(email, password) {
   const [currentUserData, setCurrentUserData] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -47,4 +58,4 @@ function userLoginFunction(email, password) {
 
 export default userLoginFunction;
 
-export { setCurrentUser, userLoginFunction };
+export { setCurrentUser, userLoginFunction, getCurrentUser };

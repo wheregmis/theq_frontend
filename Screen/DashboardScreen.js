@@ -1,15 +1,19 @@
 import { View, Text } from "react-native";
-import userLoginFunction from "../controller/user_controller";
 import Header from "../Components/Header";
 import SearchComponent from "../Components/SearchComponent";
-import OrganizationInfoCard from "../Components/OrganizationInfoCard";
+import OrganizationList from "../Components/OrganizationList";
 
 export default function Dashboard() {
   return (
     <View className="flex flex-col items-center justify-center">
       <Header />
       <SearchComponent />
-      <OrganizationInfoCard />
+      <View>
+        <Text className="text-md font-bold text-start mt-5">
+          Nearby Organizations
+        </Text>
+      </View>
+      <OrganizationList />
     </View>
   );
 }
