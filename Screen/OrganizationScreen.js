@@ -27,28 +27,28 @@ export default function OrganizationScreen({ route, navigation }) {
   const [estimatedWaitingTime, setEstimatedWaitingTime] = useState(0);
 
   function calculateEstimatedWaitingTime(
-    userPosition,
     averageServiceTime,
-    averageWaitingTime
+    averageWaitingTime,
+    userId
   ) {
-    const usersInFront = userPosition - 1;
+    // Sort the queue data by the joinedAt time
+    const sortedQueueData = organization?.queues?.sort(
+      (a, b) => new Date(a.joinedAt) - new Date(b.joinedAt)
+    );
+    // console.log(sortedQueueData);
+
+    // Get the user's position in the queue data
+    const userPosition =
+      sortedQueueData?.findIndex((queue) => queue.user === userId) + 1;
+
+    console.log(userPosition);
+    // Calculate the estimated waiting time using the user's position
+    var usersInFront = userPosition - 1;
     const estimatedWaitingTime =
       averageServiceTime * usersInFront + averageWaitingTime;
-    return estimatedWaitingTime;
-  }
 
-  function calculateEstimatedWaitTime() {
-    const userPosition = 2;
-    const averageServiceTime = 2; // minutes
-    const averageWaitingTime = 0.1; // minutes
-
-    const estimatedWaitingTime = calculateEstimatedWaitingTime(
-      userPosition,
-      averageServiceTime,
-      averageWaitingTime
-    );
-
-    setEstimatedWaitingTime(estimatedWaitingTime);
+    // setEstimatedWaitingTime(estimatedWaitingTime);
+    // console.log(estimatedWaitingTime);
   }
 
   React.useEffect(() => {
@@ -63,6 +63,8 @@ export default function OrganizationScreen({ route, navigation }) {
 
     fetchCurrentUser();
   }, []);
+
+  calculateEstimatedWaitingTime("64265acfac4949abe4ca5ee3");
 
   const handleJoinQueue = () => {
     const queueData = {
@@ -108,7 +110,9 @@ export default function OrganizationScreen({ route, navigation }) {
           {/* Create a divider */}
           <View className="w-full h-1 bg-slate-200" />
 
-          <OrganizationEstimateComponent />
+          <OrganizationEstimateComponent
+            estimatedWaitingTime={estimatedWaitingTime}
+          />
 
           {/* Create a divider */}
           <View className="w-full h-1 bg-slate-200" />

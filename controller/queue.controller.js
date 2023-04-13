@@ -33,5 +33,3 @@ function joinInQueue() {
 }
 
 export default joinInQueue;
-
-export { calculateEstimatedWaitTime };
