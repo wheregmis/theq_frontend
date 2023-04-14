@@ -43,7 +43,7 @@ function calculateEstimatedWaitingTimeAndUsersInFront(
   organization
 ) {
   // Sort the queue data by the joinedAt time
-  const sortedQueueData = organization?.queues?.sort(
+  var sortedQueueData = organization?.queues?.sort(
     (a, b) => new Date(a.joinedAt) - new Date(b.joinedAt)
   );
 

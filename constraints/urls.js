@@ -3,6 +3,8 @@ export const baseURL = "http://192.168.2.41:3000";
 
 export const userRouteURL = baseURL + "/users";
 
+export const loginURL = userRouteURL + "/login";
+
 export const organizationRouteURL = baseURL + "/organizations";
 
 export const queueRouteURL = baseURL + "/queues";

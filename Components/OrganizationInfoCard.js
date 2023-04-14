@@ -46,7 +46,7 @@ const OrganizationInfoCard = ({ organizationId, loading, onPress }) => {
           <View className="flex flex-row items-center justify-center h-11 rounded-md px-3 mt-1 border-2 w-40 mx-auto">
             <ShimmerPlaceholder visible={!loading}>
               <Text className="text-5md text-gray-500 font-bold">
-                {organization.queues ? organization?.queues.length : 0}
+                {organization?.queues ? organization?.queues.length : 0}
               </Text>
             </ShimmerPlaceholder>
           </View>

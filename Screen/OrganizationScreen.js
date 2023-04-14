@@ -60,21 +60,21 @@ export default function OrganizationScreen({ route, navigation }) {
     setEstimatedWaitingTime(estimatedWaitingTime);
     setPeopleInFront(usersInFront);
 
-    if (usersInFront === 0) {
-      pushLocalNotification(
-        "You are next in line!",
-        "Please proceed to the counter",
-        {}
-      );
-    }
+    // if (usersInFront === 0) {
+    //   pushLocalNotification(
+    //     "You are next in line!",
+    //     "Please proceed to the counter",
+    //     {}
+    //   );
+    // }
 
-    if (usersInFront === 1) {
-      pushLocalNotification(
-        "You are next in line after 1 person!",
-        "Please be ready to proceed to the counter",
-        {}
-      );
-    }
+    // if (usersInFront === 1) {
+    //   pushLocalNotification(
+    //     "You are next in line after 1 person!",
+    //     "Please be ready to proceed to the counter",
+    //     {}
+    //   );
+    // }
   }, [organization]);
 
   const handleJoinQueue = () => {

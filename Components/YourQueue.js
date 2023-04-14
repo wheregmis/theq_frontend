@@ -4,7 +4,10 @@ import useFetchOrganizations from "../controller/organization_controller";
 import OrganizationInfoCard from "./OrganizationInfoCard";
 import { useNavigation } from "@react-navigation/native";
 import { useRecoilState } from "recoil";
-import { organizationsAtom } from "../state/atoms";
+import {
+  currentQueueOrganizationAtom,
+  organizationsAtom,
+} from "../state/atoms";
 import { getCurrentUser } from "../controller/user_controller";
 
 import {
@@ -15,10 +18,8 @@ import {
 const YourQueueComponent = () => {
   const [organizations, setOrganizations] = useRecoilState(organizationsAtom);
   const [currentUser, setCurrentUser] = React.useState(null);
-  const [currentQueueOrganizationId, setCurrentQueueOrganizationId] =
-    React.useState(null);
-
-  const [queueOrganization, setQueueOrganization] = React.useState(null);
+  const [currentQueueOrganization, setCurrentQueueOrganization] =
+    useRecoilState(currentQueueOrganizationAtom);
 
   const navigation = useNavigation();
   const handleOrganizationPress = (organizationId) => {
@@ -26,26 +27,30 @@ const YourQueueComponent = () => {
     navigation.navigate("OrganizationScreen", { organizationId });
   };
 
-  function findCurrentQueue() {
-    for (let i = 0; i < organizations?.length; i++) {
-      const organization = organizations[i];
-      if (organization.queues.length > 0) {
-        for (let j = 0; j < organization.queues.length; j++) {
-          const queue = organization.queues[j];
-          if (queue.user == currentUser?._id) {
-            setCurrentQueueOrganizationId(organization?._id);
-            setQueueOrganization(organization);
-          }
-        }
-      }
-    }
-  }
+  const [isNotificationSent, setIsNotificationSent] = React.useState(false);
+
+  const [queueDiv, setQueueDiv] = React.useState(false);
 
   React.useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await getCurrentUser();
-      setCurrentUser(user);
+      setCurrentUser(user.data);
+      findCurrentQueue();
     };
+
+    function findCurrentQueue() {
+      // checking the user's queue and if the user is not in any queue, then set the currentQueueOrganization to null
+      const currentQueOrg = organizations?.find(
+        (org) =>
+          org.queues.find((q) => q.user === currentUser?._id) !== undefined
+      );
+
+      if (currentQueOrg === undefined) {
+        setCurrentQueueOrganization(null);
+      } else {
+        setCurrentQueueOrganization(currentQueOrg);
+      }
+    }
 
     const averageServiceTime = 3;
 
@@ -53,38 +58,44 @@ const YourQueueComponent = () => {
       calculateEstimatedWaitingTimeAndUsersInFront(
         averageServiceTime,
         currentUser?._id,
-        queueOrganization
+        currentQueueOrganization
       );
-
-    console.log(estimatedWaitingTime, usersInFront);
 
     if (usersInFront === 0) {
-      pushLocalNotification(
-        "You are next in line!",
-        "Please proceed to the counter",
-        {}
-      );
+      if (!isNotificationSent) {
+        pushLocalNotification(
+          "You are next in line!",
+          "Please proceed to the counter",
+          {}
+        );
+        setIsNotificationSent(true);
+      }
     }
 
-    if (usersInFront === 1) {
-      pushLocalNotification(
-        "You are next in line after 1 person!",
-        "Please be ready to proceed to the counter",
-        {}
-      );
-    }
+    // if (usersInFront === 1) {
+    //   pushLocalNotification(
+    //     "You are next in line after 1 person!",
+    //     "Please be ready to proceed to the counter",
+    //     {}
+    //   );
+    // }
 
     fetchCurrentUser();
-    findCurrentQueue();
+
+    if (currentQueueOrganization != undefined) {
+      setQueueDiv(true);
+    } else {
+      setQueueDiv(false);
+    }
   }, [organizations]);
 
   return (
     <View>
-      {currentQueueOrganizationId ? (
+      {queueDiv ? (
         <OrganizationInfoCard
-          organizationId={currentQueueOrganizationId}
-          loading={currentQueueOrganizationId == null}
-          onPress={() => handleOrganizationPress(currentQueueOrganizationId)}
+          organizationId={currentQueueOrganization?._id}
+          loading={currentQueueOrganization?._id == null}
+          onPress={() => handleOrganizationPress(currentQueueOrganization?._id)}
         ></OrganizationInfoCard>
       ) : (
         <Text>You are not in any queue</Text>

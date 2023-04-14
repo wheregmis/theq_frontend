@@ -1,4 +1,4 @@
-import { View, Text, Image, SafeAreaView } from "react-native";
+import { View, Text, Image, SafeAreaView, Pressable } from "react-native";
 import { ArrowLeftOnRectangleIcon } from "react-native-heroicons/outline";
 
 export default function Header() {
@@ -17,9 +17,15 @@ export default function Header() {
           <Text className="text-1xl font-bold text-gray-500">The </Text>
           <Text className="text-1xl font-bold text-green-700">Q</Text>
         </View>
-        <View className=" items-center justify-center rounded-md ml-5">
-          <ArrowLeftOnRectangleIcon className="h-10 w-10 text-red-500" />
-        </View>
+        <Pressable
+          onPress={() => {
+            console.log("pressed");
+          }}
+        >
+          <View className=" items-center justify-center rounded-md ml-5">
+            <ArrowLeftOnRectangleIcon className="h-10 w-10 text-red-500" />
+          </View>
+        </Pressable>
       </View>
     </SafeAreaView>
   );

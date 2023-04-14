@@ -22,14 +22,16 @@ const OrganizationList = () => {
 
   return (
     <ScrollView horizontal>
-      {organizations?.map((organization) => (
-        <OrganizationInfoCard
-          key={organization._id}
-          organizationId={organization._id}
-          loading={organization == null}
-          onPress={() => handleOrganizationPress(organization._id)}
-        />
-      ))}
+      {organizations
+        ? organizations.map((organization) => (
+            <OrganizationInfoCard
+              key={organization._id}
+              organizationId={organization._id}
+              loading={organization == null}
+              onPress={() => handleOrganizationPress(organization._id)}
+            />
+          ))
+        : null}
     </ScrollView>
   );
 };

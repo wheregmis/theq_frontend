@@ -14,6 +14,14 @@ async function setCurrentUser(userData) {
   }
 }
 
+async function removeCurrentUser() {
+  try {
+    await Storage.removeItem({ key: "currentUser" });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function getCurrentUser() {
   try {
     const value = await Storage.getItem({ key: "currentUser" });
@@ -37,14 +45,16 @@ function userLoginFunction(email, password) {
         password,
       });
       if (response.status === 200) {
-        console.log(response.data);
+        console.log("success");
         setLoggedIn(true);
         setCurrentUser(response.data);
         setCurrentUserData(response.data);
       }
       // todo: Store the token in the local storage
+      console.log(response);
     } catch (error) {
-      setError(error.response.data.message);
+      setError(error);
+      console.log(error);
     }
   };
 

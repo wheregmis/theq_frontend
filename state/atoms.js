@@ -14,3 +14,8 @@ export const estimatedWaitingTimeAtom = atom({
   key: "estimatedWaitingTimeAtom",
   default: 0,
 });
+
+export const currentQueueOrganizationAtom = atom({
+  key: "currentQueueOrganization",
+  default: null,
+});
