@@ -8,3 +8,5 @@ export const organizationRouteURL = baseURL + "/organizations";
 export const queueRouteURL = baseURL + "/queues";
 
 export const refreshInterval = 1000;
+
+export const averageServiceTime = 3;

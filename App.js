@@ -8,11 +8,19 @@ import Dashboard from "./Screen/DashboardScreen";
 import AdminDashboard from "./Screen/AdminDashboard";
 import OrganizationScreen from "./Screen/OrganizationScreen";
 import { RecoilRoot } from "recoil";
+import registerForPushNotificationsAsync, {
+  calculateEstimatedWaitingTimeAndUsersInFront,
+  pushLocalNotification,
+} from "./controller/notification_controller";
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   const [projects, setProjects] = React.useState([]);
+
+  React.useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
 
   return (
     <RecoilRoot>

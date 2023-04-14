@@ -2,6 +2,7 @@ import { TextInput, View, Text } from "react-native";
 
 export default function OrganizationEstimateComponent({
   estimatedWaitingTime,
+  peopleInFront,
 }) {
   return (
     <View className="bg-white w-full rounded-xl mb-12 p-4">
@@ -15,12 +16,12 @@ export default function OrganizationEstimateComponent({
         placeholderTextColor="#000"
         value={estimatedWaitingTime + " Minutes"}
       />
-      {/* <Text className="mb-1">Estimated waiting time</Text>
+      <Text className="mb-1">Your Turn is After</Text>
       <TextInput
         className="w-full bg-white border border-slate-200 rounded-md h-12 px-4"
         placeholderTextColor="#000"
-        placeholder="Placeholder"
-      /> */}
+        value={peopleInFront + " People"}
+      />
     </View>
   );
 }

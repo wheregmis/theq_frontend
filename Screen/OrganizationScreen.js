@@ -13,6 +13,11 @@ import joinInQueue from "../controller/queue.controller";
 import { organizationsAtom } from "../state/atoms";
 import { useRecoilState } from "recoil";
 
+import {
+  calculateEstimatedWaitingTimeAndUsersInFront,
+  pushLocalNotification,
+} from "../controller/notification_controller";
+
 export default function OrganizationScreen({ route, navigation }) {
   const { organizationId } = route.params;
 
@@ -25,31 +30,7 @@ export default function OrganizationScreen({ route, navigation }) {
     joinInQueue();
 
   const [estimatedWaitingTime, setEstimatedWaitingTime] = useState(0);
-
-  function calculateEstimatedWaitingTime(
-    averageServiceTime,
-    averageWaitingTime,
-    userId
-  ) {
-    // Sort the queue data by the joinedAt time
-    const sortedQueueData = organization?.queues?.sort(
-      (a, b) => new Date(a.joinedAt) - new Date(b.joinedAt)
-    );
-    // console.log(sortedQueueData);
-
-    // Get the user's position in the queue data
-    const userPosition =
-      sortedQueueData?.findIndex((queue) => queue.user === userId) + 1;
-
-    console.log(userPosition);
-    // Calculate the estimated waiting time using the user's position
-    var usersInFront = userPosition - 1;
-    const estimatedWaitingTime =
-      averageServiceTime * usersInFront + averageWaitingTime;
-
-    // setEstimatedWaitingTime(estimatedWaitingTime);
-    // console.log(estimatedWaitingTime);
-  }
+  const [peopleInFront, setPeopleInFront] = useState(0);
 
   React.useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -64,7 +45,37 @@ export default function OrganizationScreen({ route, navigation }) {
     fetchCurrentUser();
   }, []);
 
-  calculateEstimatedWaitingTime("64265acfac4949abe4ca5ee3");
+  React.useEffect(() => {
+    const averageServiceTime = 3;
+
+    const { estimatedWaitingTime, usersInFront } =
+      calculateEstimatedWaitingTimeAndUsersInFront(
+        averageServiceTime,
+        currentUser?._id,
+        organization
+      );
+
+    console.log(estimatedWaitingTime, usersInFront);
+
+    setEstimatedWaitingTime(estimatedWaitingTime);
+    setPeopleInFront(usersInFront);
+
+    if (usersInFront === 0) {
+      pushLocalNotification(
+        "You are next in line!",
+        "Please proceed to the counter",
+        {}
+      );
+    }
+
+    if (usersInFront === 1) {
+      pushLocalNotification(
+        "You are next in line after 1 person!",
+        "Please be ready to proceed to the counter",
+        {}
+      );
+    }
+  }, [organization]);
 
   const handleJoinQueue = () => {
     const queueData = {
@@ -112,6 +123,7 @@ export default function OrganizationScreen({ route, navigation }) {
 
           <OrganizationEstimateComponent
             estimatedWaitingTime={estimatedWaitingTime}
+            peopleInFront={peopleInFront}
           />
 
           {/* Create a divider */}
