@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, SafeAreaView, Pressable } from "react-native";
+import { View, Text, ScrollView, SafeAreaView, Pressable,TouchableOpacity } from "react-native";
 
 import OrganizationInfoCard from "../Components/OrganizationInfoCard";
 import { useFetchOrganization } from "../controller/organization_controller";
@@ -85,6 +85,12 @@ export default function OrganizationScreen({ route, navigation }) {
 
     joinQueue(queueData);
   };
+  const [showRatingScreen, setShowRatingScreen] = useState(false);
+
+   // Handler function for the onPress event of the StarIcon
+  const handleStarIconPress = () => {
+    setShowRatingScreen(true);
+  };
 
   return (
     <SafeAreaView className="">
@@ -130,7 +136,10 @@ export default function OrganizationScreen({ route, navigation }) {
           <View className="w-full h-1 bg-slate-200" />
 
           <View className="flex flex-row px-6 w-full items-center justify-evenly mt-3 mb-5">
-            <StarIcon className="h-6 w-6 text-yellow-400" />
+            //Todo : check ratingscreen
+            <TouchableOpacity onPress={handleStarIconPress}>
+              <StarIcon className="h-6 w-6 text-yellow-400" />
+            </TouchableOpacity>
             <ChatBubbleBottomCenterTextIcon className="h-6 w-6 text-gray-400" />
           </View>
         </View>
