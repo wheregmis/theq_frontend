@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./Screen/LoginScreen";
 import Dashboard from "./Screen/DashboardScreen";
 import AdminDashboard from "./Screen/AdminDashboard";
+import UserProfile from "./Screen/UserProfile";
 import OrganizationScreen from "./Screen/OrganizationScreen";
 import { RecoilRoot } from "recoil";
 import registerForPushNotificationsAsync, {
