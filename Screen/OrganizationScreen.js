@@ -150,7 +150,9 @@ export default function OrganizationScreen({ route, navigation }) {
           <View className="flex flex-row px-6 w-full items-center justify-evenly mt-3 mb-5">
             <TouchableOpacity
               onPress={() => {
-                handleStarIconPress();
+                navigation.navigate("RatingScreen", {
+                  organizationId: organizationId,
+                });
               }}
             >
               <StarIcon className="h-6 w-6 text-yellow-400" />

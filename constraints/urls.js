@@ -18,6 +18,7 @@ export const signUpURL = userRouteURL + "/users";
 export const swapQueueUrl = queueRouteURL + "/swap";
 
 export const messageUrl = baseURL + "/messages";
+export const ratingUrl = baseURL + "/ratings";
 
 const midjourneyProfileImagesUrls = [
   "https://cdn.discordapp.com/attachments/997261989292282007/1097986332338438184/neilarths_time_traveller_looking_to_the_camera_flying_in_action_51dd74cb-f9d3-400d-978c-87d32defcb9c.png",
