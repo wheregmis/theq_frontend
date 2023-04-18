@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, SafeAreaView, Pressable,TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 
 import OrganizationInfoCard from "../Components/OrganizationInfoCard";
 import { useFetchOrganization } from "../controller/organization_controller";
@@ -17,6 +24,7 @@ import {
   calculateEstimatedWaitingTimeAndUsersInFront,
   pushLocalNotification,
 } from "../controller/notification_controller";
+import { StackActions } from "@react-navigation/native";
 
 export default function OrganizationScreen({ route, navigation }) {
   const { organizationId } = route.params;
@@ -87,9 +95,13 @@ export default function OrganizationScreen({ route, navigation }) {
   };
   const [showRatingScreen, setShowRatingScreen] = useState(false);
 
-   // Handler function for the onPress event of the StarIcon
+  // Handler function for the onPress event of the StarIcon
   const handleStarIconPress = () => {
-    setShowRatingScreen(true);
+    navigation.dispatch(
+      StackActions.replace("RatingScreen", {
+        organizationId: organizationId,
+      })
+    );
   };
 
   return (
@@ -136,12 +148,26 @@ export default function OrganizationScreen({ route, navigation }) {
           <View className="w-full h-1 bg-slate-200" />
 
           <View className="flex flex-row px-6 w-full items-center justify-evenly mt-3 mb-5">
-            //Todo : check ratingscreen
-            <TouchableOpacity onPress={handleStarIconPress}>
+            <TouchableOpacity
+              onPress={() => {
+                handleStarIconPress();
+              }}
+            >
               <StarIcon className="h-6 w-6 text-yellow-400" />
             </TouchableOpacity>
-            <ChatBubbleBottomCenterTextIcon className="h-6 w-6 text-gray-400" />
+
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("ChatScreen", {
+                  organizationId: organizationId,
+                });
+              }}
+            >
+              <ChatBubbleBottomCenterTextIcon className="h-6 w-6 text-gray-400" />
+            </TouchableOpacity>
           </View>
+
+          {/* Create a divider */}
         </View>
       </ScrollView>
     </SafeAreaView>

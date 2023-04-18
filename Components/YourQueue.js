@@ -2,7 +2,7 @@ import React from "react";
 import { View, ScrollView, Text } from "react-native";
 import useFetchOrganizations from "../controller/organization_controller";
 import OrganizationInfoCard from "./OrganizationInfoCard";
-import { useNavigation } from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import { useRecoilState } from "recoil";
 import {
   currentQueueOrganizationAtom,

@@ -13,12 +13,12 @@ import registerForPushNotificationsAsync, {
   calculateEstimatedWaitingTimeAndUsersInFront,
   pushLocalNotification,
 } from "./controller/notification_controller";
+import RatingScreen from "./Screen/RatingScreen";
+import ChatScreen from "./Screen/ChatScreen";
 
 const Stack = createNativeStackNavigator();
 
 function App() {
-  const [projects, setProjects] = React.useState([]);
-
   React.useEffect(() => {
     registerForPushNotificationsAsync();
   }, []);
@@ -26,7 +26,7 @@ function App() {
   return (
     <RecoilRoot>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="UserDashboard">
+        <Stack.Navigator initialRouteName="LoginScreen">
           <Stack.Screen
             name="LoginScreen"
             component={LoginScreen}
@@ -55,6 +55,33 @@ function App() {
           <Stack.Screen
             name="OrganizationScreen"
             component={OrganizationScreen}
+            options={{
+              headerBackVisible: false,
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="RatingScreen"
+            component={RatingScreen}
+            options={{
+              headerBackVisible: false,
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="UserProfile"
+            component={UserProfile}
+            options={{
+              headerBackVisible: false,
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="ChatScreen"
+            component={ChatScreen}
             options={{
               headerBackVisible: false,
               headerShown: false,

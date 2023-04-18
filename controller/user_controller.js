@@ -33,7 +33,7 @@ async function getCurrentUser() {
   }
 }
 
-function userLoginFunction(email, password) {
+function userLoginFunction() {
   const [currentUserData, setCurrentUserData] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [error, setError] = useState(null);
@@ -45,13 +45,10 @@ function userLoginFunction(email, password) {
         password,
       });
       if (response.status === 200) {
-        console.log("success");
         setLoggedIn(true);
-        setCurrentUser(response.data);
+        await setCurrentUser(response.data);
         setCurrentUserData(response.data);
       }
-      // todo: Store the token in the local storage
-      console.log(response);
     } catch (error) {
       setError(error);
       console.log(error);
@@ -61,6 +58,7 @@ function userLoginFunction(email, password) {
   const logout = () => {
     setLoggedIn(false);
     // todo: Clear the token from the local storage
+    removeCurrentUser();
   };
 
   return [loggedIn, currentUserData, error, login, logout];
