@@ -4,6 +4,8 @@ import userLoginFunction, {
   getCurrentUser,
 } from "../controller/user_controller";
 import { StackActions } from "@react-navigation/native";
+import axios from "axios";
+import { userRouteURL } from "../constraints/urls";
 
 export default function LoginScreen({ route, navigation }) {
   const [email, setEmail] = React.useState("");
@@ -101,7 +103,7 @@ export default function LoginScreen({ route, navigation }) {
         </Pressable>
         <Pressable
           className="h-12 w-40 bg-black rounded-md mx-auto flex flex-row justify-center items-center px-6 mt-4"
-          onPress={handleLogin}
+          onPress={() => handleSignUp()}
         >
           <View className="flex-1 flex items-center">
             <Text className="text-white text-base font-medium">Sign Up</Text>
@@ -118,6 +120,24 @@ export default function LoginScreen({ route, navigation }) {
       console.log("currentUser", currentUserData);
     } catch (err) {
       alert("Invalid email or password");
+      console.log(err);
+    }
+  }
+
+  async function handleSignUp() {
+    try {
+      const response = await axios.post(userRouteURL, {
+        name: "test",
+        email: email,
+        password: password,
+      });
+      console.log(response);
+
+      if (response.status == 200) {
+        alert("Sign Up success");
+      }
+    } catch (err) {
+      alert("Sign Up failed");
       console.log(err);
     }
   }

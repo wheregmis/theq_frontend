@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import axios from 'axios';
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import axios from "axios";
 
 const SignupScreen = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
     try {
       const response = await axios.post(signUpURL, {
-        name,
-        email,
-        password,
+        name: name,
+        email: email,
+        password: password,
       });
 
       console.log(response.data);
     } catch (error) {
-      alert('Error in signing up');
+      alert("Error in signing up");
       console.error(error);
     }
   };
