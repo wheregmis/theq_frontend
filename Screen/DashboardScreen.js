@@ -61,6 +61,7 @@ export default function Dashboard() {
           const user = await getCurrentUser();
           setCurrentUser(user.data);
         } catch (err) {
+          alert("Error fetching current user");
           console.log(err);
         }
       }
@@ -77,6 +78,7 @@ export default function Dashboard() {
       );
       console.log(response);
     } catch (err) {
+      alert("Error swapping queue");
       console.log(err);
     }
   }

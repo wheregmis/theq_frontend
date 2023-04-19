@@ -17,6 +17,7 @@ export default function Header() {
         const user = await getCurrentUser();
         setCurrentUser(user.data);
       } catch (err) {
+        alert("Error fetching current user");
         console.log(err);
       }
     };

@@ -17,6 +17,7 @@ const SignupScreen = () => {
 
       console.log(response.data);
     } catch (error) {
+      alert('Error in signing up');
       console.error(error);
     }
   };
