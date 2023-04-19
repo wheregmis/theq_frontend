@@ -23,6 +23,7 @@ const useFetchMessage = (organizationId) => {
         const data = await response.json();
         setMessages(data.data);
       } catch (err) {
+        alert("Error fetching messages");
         setError(err.message);
       } finally {
         setLoading(false);

@@ -24,6 +24,7 @@ const useFetchOrganizations = () => {
         const data = await response.json();
         setOrganizations(data.data);
       } catch (err) {
+        alert("Error fetching organizations");
         setError(err.message);
       } finally {
         setLoading(false);
@@ -64,6 +65,7 @@ const useFetchOrganization = (organizationId) => {
         const data = await response.json();
         setOrganization(data.data);
       } catch (err) {
+        alert("Error fetching organization");
         setError(err.message);
       } finally {
         setLoading(false);
