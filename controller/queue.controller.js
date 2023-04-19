@@ -23,6 +23,7 @@ function joinInQueue() {
       // todo: Store the token in the local storage
       console.log(response);
     } catch (error) {
+      alert("Error in joining the queue");
       console.log(error.response.data.message);
       setLoading(false);
       setError(error.response.data.message);

@@ -10,6 +10,8 @@ async function setCurrentUser(userData) {
       value: JSON.stringify(userData),
     });
   } catch (error) {
+       //set alert
+    alert("Error saving user data ");
     console.log(error);
   }
 }
@@ -18,6 +20,7 @@ async function removeCurrentUser() {
   try {
     await Storage.removeItem({ key: "currentUser" });
   } catch (error) {
+    alert("Error removing user data ");
     console.log(error);
   }
 }
@@ -29,6 +32,7 @@ async function getCurrentUser() {
       return JSON.parse(value);
     }
   } catch (error) {
+    alert("Error getting user data ");
     console.log(error);
   }
 }
@@ -50,6 +54,7 @@ function userLoginFunction() {
         setCurrentUserData(response.data);
       }
     } catch (error) {
+      alert("Error logging in ");
       setError(error);
       console.log(error);
     }
