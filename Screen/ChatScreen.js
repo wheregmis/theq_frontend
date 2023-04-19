@@ -70,6 +70,7 @@ const ChatScreen = ({ route, nativation }) => {
       // todo: Store the token in the local storage
       console.log(response);
     } catch (error) {
+      alert("Error sending message");
       console.log(error);
     }
   };

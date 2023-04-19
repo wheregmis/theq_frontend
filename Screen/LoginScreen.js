@@ -21,6 +21,7 @@ export default function LoginScreen({ route, navigation }) {
             : navigation.dispatch(StackActions.replace("AdminDashboard"));
         }
       } catch (err) {
+        alert("Error fetching current user");
         console.log(err);
       }
     };
@@ -116,6 +117,7 @@ export default function LoginScreen({ route, navigation }) {
       await login(email, password);
       console.log("currentUser", currentUserData);
     } catch (err) {
+      alert("Invalid email or password");
       console.log(err);
     }
   }
