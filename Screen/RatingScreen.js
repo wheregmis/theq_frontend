@@ -9,25 +9,25 @@ import {
   Pressable,
   Image,
 } from "react-native";
-import useFetchMessages from "../controller/message_controller";
-import { messageUrl, midJourneyImageUrl } from "../constraints/urls";
-import axios from "axios";
 import Header from "../Components/Header";
+import useFetchRatings from "../controller/rating_controller";
+import { midJourneyImageUrl } from "../constraints/urls";
 
 const RatingScreen = ({ route, nativation }) => {
   const { organizationId } = route.params;
 
-  const { messages, loading, error } = useFetchMessages(organizationId);
-  const [message, setMessage] = useState("");
+  const { ratings, loading, error } = useFetchRatings(organizationId);
 
-  if (error) {
-    console.log(error);
-  }
+  console.log(ratings);
 
-  const messageCard = (message) => {
+  // if (error) {
+  //   console.log(error);
+  // }
+
+  const ratingCard = (rating) => {
     return (
       <View
-        key={message._id}
+        key={rating._id}
         className="flex flex-row items-center justify-start m-2 p-2 border-2 border-gray-200"
       >
         <View className="bg-transparent items-center justify-center rounded-md">
@@ -45,11 +45,11 @@ const RatingScreen = ({ route, nativation }) => {
           </Pressable>
         </View>
         <View className="items-start">
-          <Text>{message.message}</Text>
+          <Text>{rating.rating}</Text>
         </View>
         <View>
           <Text className="text-end text-sm text-gray-400">
-            {message.createdAt}
+            {rating.createdAt}
           </Text>
         </View>
       </View>
@@ -66,11 +66,11 @@ const RatingScreen = ({ route, nativation }) => {
             Organization {organizationId}
           </Text>
           <Text className="text-center text-2xl font-bold text-gray-500 mb-10">
-            Messages and Discussion
+            Ratings
           </Text>
         </View>
 
-        {messages ? messages.map((message) => messageCard(message)) : null}
+        {ratings ? ratings.map((rating) => ratingCard(rating)) : null}
       </View>
     </SafeAreaView>
   );
