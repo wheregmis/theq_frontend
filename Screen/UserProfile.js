@@ -6,16 +6,20 @@ import userLoginFunction, {
 import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { ArrowLeftIcon } from "react-native-heroicons/outline";
-import { midJourneyImageUrl } from "../constraints/urls";
+import { midJourneyImageUrl, urlHasImage } from "../constraints/urls";
 
 export default function UserP({ route, navigation }) {
   const [currentUser, setCurrentUser] = React.useState(null);
+  const [userImage, setUserImage] = React.useState(null);
 
   React.useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
         const user = await getCurrentUser();
         setCurrentUser(user.data);
+        (await urlHasImage(user.data.image))
+          ? setUserImage(user.data.image)
+          : setUserImage(midJourneyImageUrl);
       } catch (err) {
         alert("Error fetching current user");
         console.log(err);
@@ -37,7 +41,7 @@ export default function UserP({ route, navigation }) {
       </View>
       <Image
         source={{
-          uri: currentUser?.image,
+          uri: userImage,
         }}
         style={styles.profileImage}
       />
