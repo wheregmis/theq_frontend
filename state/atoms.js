@@ -19,3 +19,8 @@ export const currentQueueOrganizationAtom = atom({
   key: "currentQueueOrganization",
   default: null,
 });
+
+export const searchFilterAtom = atom({
+  key: "searchFilterAtom",
+  default: "",
+});

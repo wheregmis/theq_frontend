@@ -2,13 +2,14 @@ import { View, Text, Image, SafeAreaView, Pressable } from "react-native";
 import { ArrowLeftOnRectangleIcon } from "react-native-heroicons/outline";
 import { StackActions, useNavigation } from "@react-navigation/native";
 import userLoginFunction from "../controller/user_controller";
-import { midJourneyImageUrl } from "../constraints/urls";
+import { midJourneyImageUrl, urlHasImage } from "../constraints/urls";
 import { getCurrentUser } from "../controller/user_controller";
 import React from "react";
 
 export default function Header() {
   const [loggedIn, currentUserData, error, login, logout] = userLoginFunction();
   const [currentUser, setCurrentUser] = React.useState(null);
+  const [currentUserImage, setCurrentUserImage] = React.useState(null);
   const navigation = useNavigation();
 
   React.useEffect(() => {
@@ -16,6 +17,9 @@ export default function Header() {
       try {
         const user = await getCurrentUser();
         setCurrentUser(user.data);
+        (await urlHasImage(user.data.image))
+          ? setCurrentUserImage(user.data.image)
+          : setCurrentUserImage(midJourneyImageUrl);
       } catch (err) {
         alert("Error fetching current user");
         console.log(err);
@@ -37,7 +41,7 @@ export default function Header() {
           >
             <Image
               source={{
-                uri: currentUser?.image,
+                uri: currentUserImage,
               }}
               className="h-16 w-16 rounded-full"
             />

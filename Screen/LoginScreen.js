@@ -6,21 +6,32 @@ import userLoginFunction, {
 import { StackActions } from "@react-navigation/native";
 import axios from "axios";
 import { userRouteURL } from "../constraints/urls";
+import CircularProgress from "../Components/CircularProgress";
 
 export default function LoginScreen({ route, navigation }) {
+  const [name, setName] = React.useState("");
+  const [aliasName, setAliasName] = React.useState("");
+  const [aboutYou, setAboutYou] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [loggedIn, currentUserData, error, login, logout] = userLoginFunction();
   const [isSignIn, setIsSignIn] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     const checkLogin = async () => {
       try {
         const user = await getCurrentUser();
         if (user) {
-          user?.data.type == "user"
-            ? navigation.dispatch(StackActions.replace("UserDashboard"))
-            : navigation.dispatch(StackActions.replace("AdminDashboard"));
+          if (user?.data.type == "user") {
+            navigation.dispatch(StackActions.replace("UserDashboard"));
+          }
+          if (user?.data.type == "admin") {
+            navigation.dispatch(StackActions.replace("AdminDashboard"));
+          }
+          if (user?.data.type == "organization") {
+            navigation.dispatch(StackActions.replace("OrganizationDashboard"));
+          }
         }
       } catch (err) {
         alert("Error fetching current user");
@@ -65,7 +76,11 @@ export default function LoginScreen({ route, navigation }) {
           }}
         >
           <View className="flex-1 flex items-center">
-            <Text className="text-white text-base font-medium">Sign In</Text>
+            {!loading ? (
+              <Text className="text-white text-base font-medium">Sign In</Text>
+            ) : (
+              <CircularProgress />
+            )}
           </View>
         </Pressable>
       </View>
@@ -74,39 +89,67 @@ export default function LoginScreen({ route, navigation }) {
 
   const signUpBody = () => {
     return (
-      <View className="p-8 mt-12 w-full max-w-sm">
+      <View className="p-8 mt-2 w-full max-w-sm">
         <Text className="text-2xl font-bold mb-6 text-slate-900">
           Sign Up to
         </Text>
 
-        <Text className="mb-1">Username</Text>
+        <Text className="mb-1">Username Or Email</Text>
         <TextInput
           className="w-full bg-white border border-slate-200 rounded-md h-12 px-4 mb-4"
           placeholderTextColor="#000"
-          placeholder="Enter email address"
+          placeholder="Enter Email Address Or Username"
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
+
         <Text className="mb-1">Password</Text>
         <TextInput
-          className="w-full bg-white border border-slate-200 rounded-md h-12 px-4"
+          className="w-full bg-white border border-slate-200 rounded-md h-12 px-4 mb-4"
           placeholderTextColor="#000"
-          placeholder="Enter password"
+          placeholder="Enter Password"
           secureTextEntry={true}
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
-        <Pressable className="mt-1 mb-5 ">
-          <View>
-            <Text className="justify-end text-right">Forgot Password?</Text>
-          </View>
-        </Pressable>
+
+        <Text className="mb-1">Full Name</Text>
+        <TextInput
+          className="w-full bg-white border border-slate-200 rounded-md h-12 px-4 mb-4"
+          placeholderTextColor="#000"
+          placeholder="Enter Your Full Name"
+          value={name}
+          onChangeText={(text) => setName(text)}
+        />
+
+        <Text className="mb-1">Alias Name</Text>
+        <TextInput
+          className="w-full bg-white border border-slate-200 rounded-md h-12 px-4 mb-4"
+          placeholderTextColor="#000"
+          placeholder="Enter A Name For You To Be Known As"
+          value={aliasName}
+          onChangeText={(text) => setAliasName(text)}
+        />
+
+        <Text className="mb-1">Describe For Generating AI Image</Text>
+        <TextInput
+          className="w-full bg-white border border-slate-200 rounded-md h-12 px-4 mb-4"
+          placeholderTextColor="#000"
+          placeholder="Enter Information Describing You"
+          value={aboutYou}
+          onChangeText={(text) => setAboutYou(text)}
+        />
+
         <Pressable
           className="h-12 w-40 bg-black rounded-md mx-auto flex flex-row justify-center items-center px-6 mt-4"
           onPress={() => handleSignUp()}
         >
           <View className="flex-1 flex items-center">
-            <Text className="text-white text-base font-medium">Sign Up</Text>
+            {!loading ? (
+              <Text className="text-white text-base font-medium">Sign Up</Text>
+            ) : (
+              <CircularProgress />
+            )}
           </View>
         </Pressable>
       </View>
@@ -116,7 +159,9 @@ export default function LoginScreen({ route, navigation }) {
   async function handleLogin() {
     console.log("handleLogin");
     try {
+      setLoading(true);
       await login(email, password);
+      setLoading(false);
       console.log("currentUser", currentUserData);
     } catch (err) {
       alert("Invalid email or password");
@@ -125,18 +170,29 @@ export default function LoginScreen({ route, navigation }) {
   }
 
   async function handleSignUp() {
+    setLoading(true);
     try {
       const response = await axios.post(userRouteURL, {
-        name: "test",
+        name: name,
+        aliasName: aliasName,
+        aboutYou: aboutYou,
         email: email,
         password: password,
       });
       console.log(response);
 
       if (response.status == 200) {
-        alert("Sign Up success");
+        alert("Sign Up success, Please Login");
+        setEmail("");
+        setPassword("");
+        setName("");
+        setAliasName("");
+        setAboutYou("");
+        setIsSignIn(true);
+        setLoading(false);
       }
     } catch (err) {
+      setLoading(false);
       alert("Sign Up failed");
       console.log(err);
     }
@@ -147,6 +203,9 @@ export default function LoginScreen({ route, navigation }) {
   }
   if (currentUserData?.data.type == "admin") {
     navigation.dispatch(StackActions.replace("AdminDashboard"));
+  }
+  if (currentUserData?.data.type == "organization") {
+    navigation.dispatch(StackActions.replace("OrganizationDashboard"));
   }
 
   return (

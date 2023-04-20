@@ -21,7 +21,7 @@ export const messageUrl = baseURL + "/messages";
 
 export const ratingUrl = baseURL + "/ratings";
 
-const midjourneyProfileImagesUrls = [
+export var midjourneyProfileImagesUrls = [
   "https://cdn.discordapp.com/attachments/997261989292282007/1097986332338438184/neilarths_time_traveller_looking_to_the_camera_flying_in_action_51dd74cb-f9d3-400d-978c-87d32defcb9c.png",
   "https://cdn.discordapp.com/attachments/997261989292282007/1097985379455479899/neilarths_closeup_of_a_worn_out_time_traveller_looking_to_the_c_3dcafb00-7667-4e76-b749-c66841228d79.png",
 ];
@@ -40,3 +40,20 @@ export const midJourneyOrganizationImageUrl =
   midJourneyOrganizationsImagesUrls[
     Math.floor(Math.random() * midJourneyOrganizationsImagesUrls.length)
   ];
+
+export const urlHasImage = async function isImage(url) {
+  try {
+    const response = await fetch(url, {
+      method: "HEAD",
+    });
+
+    if (response.status === 200) {
+      const contentType = response.headers.get("content-type");
+      return contentType.startsWith("image/");
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
+  }
+};

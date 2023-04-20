@@ -8,14 +8,28 @@ import { useRecoilState } from "recoil";
 import {
   midJourneyImageUrl,
   midJourneyOrganizationImageUrl,
+  urlHasImage,
 } from "../constraints/urls";
 
 const OrganizationInfoCard = ({ organizationId, loading, onPress }) => {
   const [organizations, setOrganizations] = useRecoilState(organizationsAtom);
+  const [organizationImage, setOrganizationImage] = useState(
+    midJourneyOrganizationImageUrl
+  );
 
   const organization = organizations.find(
     (organization) => organization._id === organizationId
   );
+
+  React.useEffect(() => {
+    async function validateAndSetImage() {
+      (await urlHasImage(organization?.image))
+        ? setOrganizationImage(organization?.image)
+        : setOrganizationImage(midJourneyOrganizationImageUrl);
+    }
+
+    validateAndSetImage();
+  }, [organizations]);
 
   const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
   return (
@@ -27,7 +41,7 @@ const OrganizationInfoCard = ({ organizationId, loading, onPress }) => {
             <ShimmerPlaceholder visible={!loading}>
               <Image
                 source={{
-                  uri: organization?.image,
+                  uri: organizationImage,
                 }}
                 className="rounded-xl mx-auto h-36 w-56"
               />

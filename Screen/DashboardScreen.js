@@ -23,6 +23,7 @@ import joinInQueue from "../controller/queue.controller";
 import { getCurrentUser } from "../controller/user_controller";
 import axios from "axios";
 import { swapQueueUrl } from "../constraints/urls";
+import CircularProgress from "../Components/CircularProgress";
 
 export default function Dashboard() {
   const [orgId, setOrgId] = useState("123");
@@ -99,7 +100,7 @@ export default function Dashboard() {
         <SearchComponent />
         <View className="flex flex-row items-center justify-center">
           <Text className="text-md font-bold text-start mt-5">
-            Nearby Organizations
+            Scan QR Code To Join Queue
           </Text>
           <Pressable
             className="mt-4 ml-3"

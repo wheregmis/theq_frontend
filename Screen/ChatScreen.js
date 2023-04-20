@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -8,23 +8,62 @@ import {
   SafeAreaView,
   Pressable,
   Image,
+  ScrollView,
 } from "react-native";
 import useFetchMessages from "../controller/message_controller";
-import { messageUrl, midJourneyImageUrl } from "../constraints/urls";
+import {
+  messageUrl,
+  midJourneyImageUrl,
+  userRouteURL,
+} from "../constraints/urls";
 import axios from "axios";
 import Header from "../Components/Header";
+import { useRecoilState } from "recoil";
+import { organizationsAtom } from "../state/atoms";
+import { getCurrentUser } from "../controller/user_controller";
+import MessageCard from "../Components/MessageCard";
 
 const ChatScreen = ({ route, nativation }) => {
   const { organizationId } = route.params;
+  const [organizations, setOrganizations] = useRecoilState(organizationsAtom);
+
+  const organization = organizations.find((org) => org._id === organizationId);
+  const [currentUser, setCurrentUser] = React.useState(null);
 
   const { messages, loading, error } = useFetchMessages(organizationId);
   const [message, setMessage] = useState("");
+
+  const scrollViewRef = useRef(null);
+
+  const scrollToBottom = () => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  };
+
+  React.useEffect(() => {
+    scrollToBottom();
+
+    const fetchCurrentUser = async () => {
+      try {
+        const user = await getCurrentUser();
+        setCurrentUser(user.data);
+      } catch (err) {
+        alert("Error fetching current user");
+        console.log(err);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   if (error) {
     console.log(error);
   }
 
   const messageCard = (message) => {
+    // fetch the user from message.userId and display the user's name
+
     return (
       <View
         key={message._id}
@@ -44,11 +83,10 @@ const ChatScreen = ({ route, nativation }) => {
             />
           </Pressable>
         </View>
-        <View className="items-start">
-          <Text>{message.message}</Text>
-        </View>
-        <View>
-          <Text className="text-end text-sm text-gray-400">
+        <View className="w-full ml-6">
+          <Text className="text-xl text-bold">Annonymous</Text>
+          <Text className="text-xl">{message.message}</Text>
+          <Text className="text-right mr-16 text-sm text-gray-400">
             {message.createdAt}
           </Text>
         </View>
@@ -59,7 +97,7 @@ const ChatScreen = ({ route, nativation }) => {
   handleSend = async () => {
     try {
       const response = await axios.post(messageUrl, {
-        userId: "64265b21ac4949abe4ca5ee5",
+        userId: currentUser?._id,
         organizationId: organizationId,
         message: message,
       });
@@ -81,15 +119,25 @@ const ChatScreen = ({ route, nativation }) => {
         <Header />
 
         <View>
-          <Text className="text-center text-2xl font-bold text-gray-500 mb-10">
-            Organization {organizationId}
+          <Text className="text-center text-2xl font-bold text-gray-500 mb-4">
+            {organization?.name}
           </Text>
           <Text className="text-center text-2xl font-bold text-gray-500 mb-10">
             Messages and Discussion
           </Text>
         </View>
-
-        {messages ? messages.map((message) => messageCard(message)) : null}
+        <ScrollView
+          className="max-h-full"
+          ref={scrollViewRef}
+          onContentSizeChange={scrollToBottom}
+          onLayout={scrollToBottom}
+        >
+          {messages
+            ? messages.map((message) => (
+                <MessageCard key={message._id} message={message} />
+              ))
+            : null}
+        </ScrollView>
       </View>
 
       <View className="flex flex-row mb-4 mt-10 p-5">

@@ -15,6 +15,7 @@ import registerForPushNotificationsAsync, {
 } from "./controller/notification_controller";
 import RatingScreen from "./Screen/RatingScreen";
 import ChatScreen from "./Screen/ChatScreen";
+import OrganizationDashboard from "./Screen/OrganizationDashboard";
 
 const Stack = createNativeStackNavigator();
 
@@ -82,6 +83,15 @@ function App() {
           <Stack.Screen
             name="ChatScreen"
             component={ChatScreen}
+            options={{
+              headerBackVisible: false,
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="OrganizationDashboard"
+            component={OrganizationDashboard}
             options={{
               headerBackVisible: false,
               headerShown: false,
