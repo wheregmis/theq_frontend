@@ -1,4 +1,12 @@
-import { View, Text, TextInput, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  ScrollView,
+  Platform,
+  KeyboardAvoidingView,
+} from "react-native";
 import React from "react";
 import userLoginFunction, {
   getCurrentUser,
@@ -209,39 +217,41 @@ export default function LoginScreen({ route, navigation }) {
   }
 
   return (
-    <View className="flex-1 items-center pt-12 justify-start bg-slate-50">
-      <View className="bg-white h-12 mt-12 mb-12 w-60 items-center justify-center rounded-md">
-        <Text className="text-1xl font-bold text-gray-500">The Q </Text>
-      </View>
-      {isSignIn ? signInBody() : signUpBody()}
+    <ScrollView>
+      <View className="flex-1 items-center pt-12 justify-start ">
+        <View className="bg-white h-12 mt-12 mb-12 w-60 items-center justify-center rounded-md">
+          <Text className="text-1xl font-bold text-gray-500">The Q </Text>
+        </View>
+        {isSignIn ? signInBody() : signUpBody()}
 
-      <Pressable className="mt-1 mb-5 ">
-        {isSignIn ? (
-          <View>
-            <Pressable
-              onPress={() => {
-                setIsSignIn(false);
-              }}
-            >
-              <Text className="justify-end text-right">
-                Not a member yet? Join Now
-              </Text>
-            </Pressable>
-          </View>
-        ) : (
-          <View>
-            <Pressable
-              onPress={() => {
-                setIsSignIn(true);
-              }}
-            >
-              <Text className="justify-end text-right">
-                Already a member? Sign In
-              </Text>
-            </Pressable>
-          </View>
-        )}
-      </Pressable>
-    </View>
+        <Pressable className="mt-1">
+          {isSignIn ? (
+            <View>
+              <Pressable
+                onPress={() => {
+                  setIsSignIn(false);
+                }}
+              >
+                <Text className="justify-end text-right">
+                  Not a member yet? Join Now
+                </Text>
+              </Pressable>
+            </View>
+          ) : (
+            <View>
+              <Pressable
+                onPress={() => {
+                  setIsSignIn(true);
+                }}
+              >
+                <Text className="justify-end text-right">
+                  Already a member? Sign In
+                </Text>
+              </Pressable>
+            </View>
+          )}
+        </Pressable>
+      </View>
+    </ScrollView>
   );
 }

@@ -5,7 +5,7 @@ export default function OrganizationEstimateComponent({
   peopleInFront,
 }) {
   return (
-    <View className="bg-white w-full rounded-xl mb-12 p-4">
+    <View className="bg-white w-full rounded-xl mb-4 p-4">
       <Text className="text-md3 font-bold mb-6 text-slate-900 text-center">
         Estimates and Other Information
       </Text>

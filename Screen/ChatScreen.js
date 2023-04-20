@@ -9,6 +9,8 @@ import {
   Pressable,
   Image,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import useFetchMessages from "../controller/message_controller";
 import {

@@ -145,10 +145,7 @@ export default function OrganizationScreen({ route, navigation }) {
             peopleInFront={peopleInFront}
           />
 
-          {/* Create a divider */}
-          <View className="w-full h-1 bg-slate-200" />
-
-          <View className="flex flex-row px-6 w-full items-center justify-evenly mt-3 mb-5">
+          <View className="flex flex-row px-6 w-full items-center justify-evenly mb-5">
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("RatingScreen", {
