@@ -16,8 +16,9 @@ import { midJourneyImageUrl } from "../constraints/urls";
 import { useRecoilState } from "recoil";
 import { organizationsAtom } from "../state/atoms";
 import RatingCard from "../Components/RatingCard";
+import { ArrowLeftIcon } from "react-native-heroicons/outline";
 
-const RatingScreen = ({ route, nativation }) => {
+const RatingScreen = ({ route, navigation }) => {
   const { organizationId } = route.params;
 
   const [organizations, setOrganizations] = useRecoilState(organizationsAtom);
@@ -42,47 +43,24 @@ const RatingScreen = ({ route, nativation }) => {
   //   console.log(error);
   // }
 
-  const ratingCard = (rating) => {
-    return (
-      <View
-        key={rating._id}
-        className="flex flex-row items-center justify-start m-2 p-2 border-2 border-gray-200"
-      >
-        <View className="bg-transparent items-center justify-center rounded-md">
-          <Pressable
-            onPress={() => {
-              console.log("pressed");
-            }}
-          >
-            <Image
-              source={{
-                uri: midJourneyImageUrl,
-              }}
-              className="h-10 w-10 rounded-full"
-            />
-          </Pressable>
-        </View>
-        <View className="w-full ml-6">
-          <Text className="text-xl text-bold">Annonymous</Text>
-          <Text className="text-xl">{rating.rating}</Text>
-          <Text className="text-right mr-16 text-sm text-gray-400">
-            {rating.createdAt}
-          </Text>
-        </View>
-      </View>
-    );
-  };
-
   return (
     <SafeAreaView>
       <View className="flex flex-col">
         <Header />
 
         <View>
-          <Text className="text-center text-2xl font-bold text-gray-500 mb-4">
+          <Text className="text-center text-2xl font-bold text-gray-500 mb-4 mt-2">
             {organization?.name}
           </Text>
-          <Text className="text-center text-xl font-bold text-gray-500 mb-4">
+
+          <Pressable
+            className="flex-row items-center justify-start w-full -mt-10"
+            onPress={() => navigation.goBack()}
+          >
+            <ArrowLeftIcon className="h-6 w-6" />
+            <Text className="text-sm ml-2 text-blue-400">Back</Text>
+          </Pressable>
+          <Text className="text-center text-xl font-bold text-gray-500 mb-4 mt-2">
             Ratings
           </Text>
           <Text className="text-center text-sm font-bold text-gray-500 mb-4">

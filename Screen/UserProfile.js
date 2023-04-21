@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, Text, TextInput, Pressable, ScrollView } from "react-native";
 import React from "react";
 import userLoginFunction, {
   getCurrentUser,
@@ -7,6 +7,8 @@ import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { ArrowLeftIcon } from "react-native-heroicons/outline";
 import { midJourneyImageUrl, urlHasImage } from "../constraints/urls";
+import Header from "../Components/Header";
+import ArrowDownLeftIcon from "react-native-heroicons/outline";
 
 export default function UserP({ route, navigation }) {
   const [currentUser, setCurrentUser] = React.useState(null);
@@ -31,70 +33,69 @@ export default function UserP({ route, navigation }) {
   console.log(currentUser);
 
   return (
-    <View style={styles.container}>
-      <View
-        className="bg-white h-12 mt-12 mb-12 shadow-md w-60 items-center justify-center rounded-md"
-        style={styles.topView}
-      >
-        <View></View>
-        <Text className="text-1xl font-bold text-gray-500">The Q </Text>
+    <ScrollView>
+      <View className="bg-slate-100 items-center justify-center">
+        <Header />
+        <Pressable
+          className="flex-row items-center justify-start mt-6 ml-14 w-full"
+          onPress={() => navigation.goBack()}
+        >
+          <ArrowLeftIcon className="h-6 w-6" />
+          <Text className="text-sm ml-2 text-blue-400">Back</Text>
+        </Pressable>
+        <View className="items-center justify-center mt-10 w-full">
+          <QRCode
+            value={JSON.stringify({
+              user: currentUser?._id,
+            })}
+            size={200}
+            backgroundColor="white"
+            color="black"
+            logoSize={50}
+            logoBackgroundColor="transparent"
+          />
+          <Text className="mt-2 text-xl">{currentUser?.name}</Text>
+          <Image
+            className="w-56 h-56 mt-10"
+            source={{
+              uri: userImage,
+            }}
+          />
+          <View className="p-8 mt-2 w-full">
+            <Text className="mb-1">Username Or Email</Text>
+            <TextInput
+              className="w-full bg-white border border-slate-200 rounded-md h-12 px-4 mb-4"
+              placeholderTextColor="#000"
+              placeholder="Enter Email Address Or Username"
+              value={currentUser?.email}
+            />
+
+            <Text className="mb-1">Full Name</Text>
+            <TextInput
+              className="w-full bg-white border border-slate-200 rounded-md h-12 px-4 mb-4"
+              placeholderTextColor="#000"
+              placeholder="Enter Your Full Name"
+              value={currentUser?.name}
+            />
+
+            <Text className="mb-1">Alias Name</Text>
+            <TextInput
+              className="w-full bg-white border border-slate-200 rounded-md h-12 px-4 mb-4"
+              placeholderTextColor="#000"
+              placeholder="Enter A Name For You To Be Known As"
+              value={currentUser?.aliasName}
+            />
+
+            <Text className="mb-1">Describe For Generating AI Image</Text>
+            <TextInput
+              className="w-full bg-white border border-slate-200 rounded-md h-12 px-4 mb-4"
+              placeholderTextColor="#000"
+              placeholder="Enter Information Describing You"
+              value={currentUser?.aboutYou}
+            />
+          </View>
+        </View>
       </View>
-      <Image
-        source={{
-          uri: userImage,
-        }}
-        style={styles.profileImage}
-      />
-      <Text style={styles.name}>{currentUser?.name}</Text>
-      <Text style={styles.email}>{currentUser?.email}</Text>
-      <QRCode
-        style={{ marginVertical: 10 }}
-        value={JSON.stringify({
-          user: currentUser?._id,
-        })}
-        size={200}
-        backgroundColor="white"
-        color="black"
-        logoSize={50}
-        logoBackgroundColor="transparent"
-      />
-    </View>
+    </ScrollView>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  topView: {
-    position: "absolute",
-    top: 0,
-  },
-  profileImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    marginBottom: 20,
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  email: {
-    fontSize: 18,
-    marginBottom: 20,
-  },
-  signOutButton: {
-    backgroundColor: "#8B0000",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  signOutButtonText: {
-    color: "#FFF",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-});

@@ -24,8 +24,9 @@ import { useRecoilState } from "recoil";
 import { organizationsAtom } from "../state/atoms";
 import { getCurrentUser } from "../controller/user_controller";
 import MessageCard from "../Components/MessageCard";
+import { ArrowLeftIcon } from "react-native-heroicons/outline";
 
-const ChatScreen = ({ route, nativation }) => {
+const ChatScreen = ({ route, navigation }) => {
   const { organizationId } = route.params;
   const [organizations, setOrganizations] = useRecoilState(organizationsAtom);
 
@@ -121,10 +122,18 @@ const ChatScreen = ({ route, nativation }) => {
         <Header />
 
         <View>
-          <Text className="text-center text-2xl font-bold text-gray-500 mb-4">
+          <Text className="text-center text-2xl font-bold text-gray-500 mb-4 mt-2">
             {organization?.name}
           </Text>
-          <Text className="text-center text-2xl font-bold text-gray-500 mb-10">
+
+          <Pressable
+            className="flex-row items-center justify-start -mt-10 ml-2"
+            onPress={() => navigation.goBack()}
+          >
+            <ArrowLeftIcon className="h-6 w-6" />
+            <Text className="text-sm ml-2 text-blue-400">Back</Text>
+          </Pressable>
+          <Text className="text-center text-2xl font-bold text-gray-500 mb-10 mt-2">
             Messages and Discussion
           </Text>
         </View>

@@ -14,6 +14,7 @@ import OrganizationEstimateComponent from "../Components/OrganizationEstimateCom
 import {
   StarIcon,
   ChatBubbleBottomCenterTextIcon,
+  ArrowLeftIcon,
 } from "react-native-heroicons/outline";
 import { getCurrentUser } from "../controller/user_controller";
 import joinInQueue from "../controller/queue.controller";
@@ -36,6 +37,20 @@ export default function OrganizationScreen({ route, navigation }) {
   const [currentUser, setCurrentUser] = React.useState(null);
   const [queueData, joinQueueLoading, joinQueueError, joinQueue] =
     joinInQueue();
+
+  const isUserInQueue = () => {
+    const currentQueOrg = organizations?.find(
+      (org) => org.queues.find((q) => q.user === currentUser?._id) !== undefined
+    );
+
+    if (currentQueOrg === undefined) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  console.log("isUserInQueue", isUserInQueue());
 
   const [estimatedWaitingTime, setEstimatedWaitingTime] = useState(0);
   const [peopleInFront, setPeopleInFront] = useState(0);
@@ -108,11 +123,20 @@ export default function OrganizationScreen({ route, navigation }) {
   return (
     <SafeAreaView className="">
       <ScrollView className="w-full ">
-        <View className="flex flex-col items-center justify-center pt-5">
-          <View className="flex flex-row px-6 w-full items-center justify-evenly">
-            <Text className="text-xl text-center font-bold mb-6 text-slate-900 -ml-2">
-              {organization?.name}
-            </Text>
+        <View className="flex flex-col items-center justify-evenly pt-5 w-full">
+          <View className="flex flex-col items-center justify-center w-full">
+            <Pressable
+              className="flex-row items-start justify-start w-full ml-2"
+              onPress={() => navigation.goBack()}
+            >
+              <ArrowLeftIcon className="h-6 w-6" />
+              <Text className="text-sm ml-2 text-blue-400">Back</Text>
+            </Pressable>
+            <View className="flex flex-row item -mt-8">
+              <Text className="text-xl text-center font-bold mb-6 text-slate-900">
+                {organization?.name}
+              </Text>
+            </View>
           </View>
 
           {/* Create a divider */}
@@ -126,16 +150,26 @@ export default function OrganizationScreen({ route, navigation }) {
           {/* Create a divider */}
           <View className="w-full h-1 bg-slate-200" />
 
-          <Pressable
-            className="h-12 w-40 bg-black rounded-md mx-auto flex flex-row justify-center items-center px-6 mt-4 mb-4"
-            onPress={() => handleJoinQueue()}
-          >
-            <View className="flex-1 flex items-center">
-              <Text className="text-white text-base font-medium">
-                Join in Queue
-              </Text>
+          {!isUserInQueue() ? (
+            <Pressable
+              className="h-12 w-40 bg-black rounded-md mx-auto flex flex-row justify-center items-center px-6 mt-4 mb-4"
+              onPress={() => handleJoinQueue()}
+            >
+              <View className="flex-1 flex items-center">
+                <Text className="text-white text-base font-medium">
+                  Join in Queue
+                </Text>
+              </View>
+            </Pressable>
+          ) : (
+            <View className="h-12 w-60 bg-black rounded-md mx-auto flex flex-row justify-center items-center px-6 mt-4 mb-4">
+              <View className="flex-1 flex items-center">
+                <Text className="text-white text-base font-xs">
+                  Already in a Queue
+                </Text>
+              </View>
             </View>
-          </Pressable>
+          )}
 
           {/* Create a divider */}
           <View className="w-full h-1 bg-slate-200" />

@@ -12,6 +12,7 @@ import userLoginFunction from "../controller/user_controller";
 import Header from "../Components/Header";
 import { organizationRouteURL } from "../constraints/urls";
 import axios from "axios";
+import CircularProgress from "../Components/CircularProgress";
 
 export default function LoginScreen({ route, navigation }) {
   const [email, setEmail] = React.useState("");
@@ -151,9 +152,13 @@ export default function LoginScreen({ route, navigation }) {
               onPress={() => handleAddOrganization()}
             >
               <View className="flex-1 flex items-center">
-                <Text className="text-white text-base font-medium">
-                  Add Organization
-                </Text>
+                {!loading ? (
+                  <Text className="text-white text-base font-medium">
+                    Add Organization
+                  </Text>
+                ) : (
+                  <CircularProgress />
+                )}
               </View>
             </Pressable>
           </View>
